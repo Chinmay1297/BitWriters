@@ -1,0 +1,6 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/API/BitWriters.API/BitWriters.API/appsettings.json
+/API/global.json
