@@ -21,7 +21,7 @@ namespace BitWriters.API.Controllers
 
         //POST: /api/categories
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
+        public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto request)
         {
             //Converting/mapping DTO to Domain model
             var category = new Category
@@ -61,6 +61,27 @@ namespace BitWriters.API.Controllers
                 });
             }
 
+            return Ok(response);
+        }
+
+        //GET: https://localhost:7163/api/Categories/{id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetCategoryById([FromRoute] Guid id)
+        {
+            var existingCategory =  await categoryRepository.GetById(id);
+
+            if (existingCategory == null)
+            {
+                return NotFound();
+            }
+
+            var response = new CategoryDto
+            {
+                Id = existingCategory.Id,
+                Name = existingCategory.Name,
+                UrlHandle = existingCategory.UrlHandle
+            };
             return Ok(response);
         }
     }
