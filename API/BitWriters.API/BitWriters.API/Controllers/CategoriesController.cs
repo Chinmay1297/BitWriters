@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using BitWriters.API.Models.DTO;
 using BitWriters.API.Models.Domain;
 using BitWriters.API.Data;
+using BitWriters.API.Repositories.Interface;
 
 namespace BitWriters.API.Controllers
 {
@@ -11,12 +12,13 @@ namespace BitWriters.API.Controllers
     [ApiController]
     public class CategoriesController : ControllerBase
     {
-        private readonly ApplicationDbContext dbContext;
+        private readonly ICategoryRepository categoryRepository;
 
-        public CategoriesController(ApplicationDbContext dbContext)
+        public CategoriesController(ICategoryRepository categoryRepository)
         {
-            this.dbContext = dbContext;
+            this.categoryRepository = categoryRepository;
         }
+
         //
         [HttpPost]
         public async Task<IActionResult> CreateCategory(CreateCategoryRequestDto request)
@@ -28,8 +30,7 @@ namespace BitWriters.API.Controllers
                 UrlHandle = request.UrlHandle,
             };
 
-            await dbContext.Categories.AddAsync(category);
-            await dbContext.SaveChangesAsync();
+            await categoryRepository.CreateAsync(category);
 
             //Domain model to DTO
             var response = new CategoryDto
