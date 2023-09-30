@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { AddCategoryRequest } from '../models/add-category-request.model';
+import { CategoryService } from '../services/category.service';
 
 @Component({
   selector: 'app-add-category',
@@ -10,7 +11,7 @@ export class AddCategoryComponent {
 
   categoryRequestModel: AddCategoryRequest;
 
-  constructor() {
+  constructor(private categoryService: CategoryService) {
     this.categoryRequestModel = {
       name: '',
       urlHandle: ''
@@ -18,6 +19,17 @@ export class AddCategoryComponent {
   }
 
   onFormSubmit() {
-    console.log(this.categoryRequestModel);
+    this.categoryService.addCategory(this.categoryRequestModel)
+      .subscribe({
+        next: (response) => {
+          console.log('This was successful');
+        },
+        error: (error) => {
+          console.log("Error occured: ", error);
+        },
+        complete: () => {
+
+        }
+      });
   }
 }
