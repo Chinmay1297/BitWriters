@@ -1,6 +1,7 @@
 ﻿using BitWriters.API.Data;
 using BitWriters.API.Models.Domain;
 using BitWriters.API.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace BitWriters.API.Repositories.Implementation
 {
@@ -18,6 +19,11 @@ namespace BitWriters.API.Repositories.Implementation
             await dbContext.SaveChangesAsync();
 
             return category;
+        }
+
+        public async Task<IEnumerable<Category>> GetAllAsync()
+        {
+            return await dbContext.Categories.ToListAsync();
         }
     }
 }
