@@ -23,7 +23,7 @@ namespace BitWriters.API.Repositories.Implementation
 
         public async Task<IEnumerable<BlogPost>> GetAllAsync()
         {
-            return await dbContext.BlogPosts.ToListAsync();
+            return await dbContext.BlogPosts.Include(x=>x.Categories).ToListAsync();        //Include(x=>x.Categories) will add all the related categories
         }
     }
 }

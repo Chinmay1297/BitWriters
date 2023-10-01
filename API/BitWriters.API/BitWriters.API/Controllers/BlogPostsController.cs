@@ -11,10 +11,12 @@ namespace BitWriters.API.Controllers
     public class BlogPostsController : ControllerBase
     {
         private readonly IBlogPostRepository blogPostRepository;
+        private readonly ICategoryRepository categoryRepository;
 
-        public BlogPostsController(IBlogPostRepository blogPostRepository)
+        public BlogPostsController(IBlogPostRepository blogPostRepository, ICategoryRepository categoryRepository)
         {
             this.blogPostRepository = blogPostRepository;
+            this.categoryRepository = categoryRepository;
         }
         //POST: {apiBaseUrl}/api/blogposts
         [HttpPost]
@@ -31,7 +33,19 @@ namespace BitWriters.API.Controllers
                 ShortDescription = requestDto.ShortDescription,
                 UrlHandle = requestDto.UrlHandle,
                 PublishedDate = requestDto.PublishedDate,
+                Categories = new List<Category>()
             };
+
+            //Adding categories from requestDto to DomainModel variable
+            foreach (var categoryGuid in requestDto.Categories)
+            {
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
+                //Checking if its a valid category
+                if(existingCategory != null)
+                {
+                    blogPost.Categories.Add(existingCategory);
+                }
+            }
 
             blogPost = await blogPostRepository.CreateAsync(blogPost);
 
@@ -47,6 +61,7 @@ namespace BitWriters.API.Controllers
                 IsVisible = blogPost.IsVisible,
                 ShortDescription = blogPost.ShortDescription,
                 UrlHandle = blogPost.UrlHandle,
+                Categories = blogPost.Categories.Select(x=>new CategoryDto { Id = x.Id, Name = x.Name, UrlHandle = x.UrlHandle }).ToList(),
             };
 
             return Ok(response);
@@ -73,6 +88,7 @@ namespace BitWriters.API.Controllers
                     IsVisible = blogPost.IsVisible,
                     ShortDescription = blogPost.ShortDescription,
                     UrlHandle = blogPost.UrlHandle,
+                    Categories = blogPost.Categories.Select(x => new CategoryDto { Id = x.Id, Name = x.Name, UrlHandle = x.UrlHandle }).ToList(),
                 });
             }
 
