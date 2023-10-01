@@ -108,5 +108,25 @@ namespace BitWriters.API.Controllers
             var response = new CategoryDto { Id = category.Id, Name = category.Name, UrlHandle = category.UrlHandle };
             return Ok(response);
         }
+
+        //DELETE: https://localhost:7163/api/Categories/{id}
+        [HttpDelete]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
+        {
+            var deletedCategory = await categoryRepository.DeleteAsync(id);
+            if(deletedCategory == null)
+            {
+                return NotFound();
+            }
+
+            var response = new CategoryDto
+            {
+                Id = deletedCategory.Id,
+                Name = deletedCategory.Name,
+                UrlHandle = deletedCategory.UrlHandle,
+            };
+            return Ok(response);
+        }
     }
 }
