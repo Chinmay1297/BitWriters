@@ -25,5 +25,10 @@ namespace BitWriters.API.Repositories.Implementation
         {
             return await dbContext.BlogPosts.Include(x=>x.Categories).ToListAsync();        //Include(x=>x.Categories) will add all the related categories
         }
+
+        public async Task<BlogPost?> GetByIdAsync(Guid id)
+        {
+            return await dbContext.BlogPosts.Include(x=>x.Categories).FirstOrDefaultAsync(x=>x.Id == id);
+        }
     }
 }

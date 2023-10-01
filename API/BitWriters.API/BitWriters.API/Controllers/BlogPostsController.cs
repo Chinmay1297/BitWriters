@@ -94,5 +94,33 @@ namespace BitWriters.API.Controllers
 
             return Ok(response);
         }
+
+        //GET: {apiBaseUrl}/api/blogposts/{id}
+        [HttpGet]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> GetBlogPostById([FromRoute]Guid id)
+        {
+            var blogPost = await blogPostRepository.GetByIdAsync(id);
+            if(blogPost == null)
+            {
+                return NotFound();
+            }
+
+            var response = new BlogPostDto
+            {
+                Id = blogPost.Id,
+                Title = blogPost.Title,
+                Author = blogPost.Author,
+                Content = blogPost.Content,
+                PublishedDate = blogPost.PublishedDate,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                IsVisible = blogPost.IsVisible,
+                ShortDescription = blogPost.ShortDescription,
+                UrlHandle = blogPost.UrlHandle,
+                Categories = blogPost.Categories.Select(x => new CategoryDto { Id = x.Id, Name = x.Name, UrlHandle = x.UrlHandle }).ToList(),
+            };
+
+            return Ok(response);
+        }
     }
 }
