@@ -122,5 +122,60 @@ namespace BitWriters.API.Controllers
 
             return Ok(response);
         }
+
+        //PUT: {apiBaseUrl}/api/blogposts/{id}
+        [HttpPut]
+        [Route("{id:Guid}")]
+        public async Task<IActionResult> UpdateBlogPostById([FromRoute]Guid id, UpdateBlogPostRequestDto requestDto)
+        {
+            //Map Dto to Domain Model
+            var newBlogPost = new BlogPost
+            {
+                Id = id,
+                Title = requestDto.Title,
+                Author = requestDto.Author,
+                Content = requestDto.Content,
+                FeaturedImageUrl = requestDto.FeaturedImageUrl,
+                IsVisible = requestDto.IsVisible,
+                ShortDescription = requestDto.ShortDescription,
+                UrlHandle = requestDto.UrlHandle,
+                PublishedDate = requestDto.PublishedDate,
+                Categories = new List<Category>()
+            };
+
+            //Adding categories from requestDto to DomainModel variable
+            foreach (var categoryGuid in requestDto.Categories)
+            {
+                var existingCategory = await categoryRepository.GetById(categoryGuid);
+                //Checking if its a valid category
+                if (existingCategory != null)
+                {
+                    newBlogPost.Categories.Add(existingCategory);
+                }   
+            }
+
+            //Call repository to update BlogPost Model
+            var updatedBlogPost = await blogPostRepository.UpdateAsync(newBlogPost);
+            if (updatedBlogPost == null)
+            {
+                return NotFound();
+            }
+
+            var response = new BlogPostDto
+            {
+                Id = newBlogPost.Id,
+                Title = newBlogPost.Title,
+                Author = newBlogPost.Author,
+                Content = newBlogPost.Content,
+                PublishedDate = newBlogPost.PublishedDate,
+                FeaturedImageUrl = newBlogPost.FeaturedImageUrl,
+                IsVisible = newBlogPost.IsVisible,
+                ShortDescription = newBlogPost.ShortDescription,
+                UrlHandle = newBlogPost.UrlHandle,
+                Categories = newBlogPost.Categories.Select(x => new CategoryDto { Id = x.Id, Name = x.Name, UrlHandle = x.UrlHandle }).ToList(),
+            };
+
+            return Ok(response);
+        }
     }
 }
