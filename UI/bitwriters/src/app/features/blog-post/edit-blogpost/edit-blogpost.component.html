@@ -1,0 +1,92 @@
+<div class="container">
+    <h1 class="mt-3">Edit BlogPost</h1>
+
+    <ng-container *ngIf="blogPostModel">
+        <form #form="ngForm" (ngSubmit)="onFormSubmit()">
+            <div class="mt-2 mb-5">
+                <div class="mt-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input type="text" class="form-control" id="title" name="title" [(ngModel)]="blogPostModel.title">
+                </div>
+
+                <div class="mt-3">
+                    <label for="urlHandle" class="form-label">Url Handle</label>
+                    <input type="text" class="form-control" id="urlHandle" name="urlHandle"
+                        [(ngModel)]="blogPostModel.urlHandle">
+                </div>
+
+                <div class="mt-3">
+                    <label for="shortDescription" class="form-label">Short Description</label>
+                    <input type="text" class="form-control" id="shortDescription" name="shortDescription"
+                        [(ngModel)]="blogPostModel.shortDescription">
+                </div>
+
+                <div class="mt-3">
+                    <label for="content" class="form-label">Content</label>
+                    <div class="d-flex flex-row">
+                        <div class="col-6 p-2">
+                            <textarea class="form-control" name="content" id="content"
+                                style="height: 350px; max-height: 350px;" [(ngModel)]="blogPostModel.content">
+                            </textarea>
+                        </div>
+
+                        <div class="col-6 p-2" style="max-height: 350px; overflow-y: scroll;">
+                            <markdown [data]="blogPostModel.content"></markdown>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-3">
+                    <label for="featuredImageUrl" class="form-label">Featured Image Url</label>
+
+                    <ng-container *ngIf="blogPostModel.featuredImageUrl !== ''">
+                        <div>
+                            <img [src]="blogPostModel.featuredImageUrl" height="100" class="my-2">
+                        </div>
+                    </ng-container>
+
+                    <input type="text" class="form-control" id="featuredImageUrl" name="featuredImageUrl"
+                        [(ngModel)]="blogPostModel.featuredImageUrl">
+                </div>
+
+                <div class="mt-3">
+                    <label for="publishedDate" class="form-label">Published Date</label>
+                    <input type="date" class="form-control" id="publishedDate" name="publishedDate"
+                        value="{{blogPostModel.publishedDate}}"
+                        [ngModel]="blogPostModel.publishedDate | date: 'yyy-MM-dd'"
+                        (ngModelChange)="blogPostModel.publishedDate = $event">
+                </div>
+
+                <div class="mt-3">
+                    <label for="author" class="form-label">Author</label>
+                    <input type="text" class="form-control" id="author" name="author"
+                        [(ngModel)]="blogPostModel.author">
+                </div>
+
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" name="isVisible" id="isVisible"
+                        [(ngModel)]="blogPostModel.isVisible">
+                    <label class="form-check-label" for="isVisible">
+                        Is Visible?
+                    </label>
+                </div>
+
+                <div class="mt-3">
+                    <label for="categories" class="form-label">Categories</label>
+    
+                    <ng-container *ngIf="categories$ | async as categories">
+                        <select [(ngModel)]="selectedCategories" name="categories" id="categories" class="form-control"
+                            multiple>
+                            <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+                        </select>
+                    </ng-container>
+                </div>
+
+                <div class="mt-3">
+                    <button class="btn btn-success">Save</button>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+
+</div>
