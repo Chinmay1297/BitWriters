@@ -21,6 +21,7 @@ export class EditBlogpostComponent implements OnInit, OnDestroy {
   blogPostModel?: BlogPost;
   categories$?: Observable<Category[]>;
   selectedCategories?: string[];
+  isImageSelectorVisible: boolean = false;
 
   constructor(private route: ActivatedRoute,
     private blogPostService: BlogPostService,
@@ -65,7 +66,7 @@ export class EditBlogpostComponent implements OnInit, OnDestroy {
 
       this.updateBlogPostSubscription = this.blogPostService.UpdateBlogPost(this.id, updateBlogPost).subscribe(
         {
-          next: (response)=>{
+          next: (response) => {
             this.router.navigateByUrl('/admin/blogposts');
           }
         }
@@ -73,17 +74,24 @@ export class EditBlogpostComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDelete():void{
-    if(this.id)
-    {
+  onDelete(): void {
+    if (this.id) {
       this.deleteBlogPostSubscription = this.blogPostService.deleteBlogPost(this.id).subscribe(
         {
-          next: response=>{
+          next: response => {
             this.router.navigateByUrl('/admin/blogposts');
           }
         }
       );
     }
+  }
+
+  openImageSelector(): void {
+    this.isImageSelectorVisible = true;
+  }
+
+  closeImageSelector(): void {
+    this.isImageSelectorVisible = false;
   }
 
   ngOnDestroy(): void {
