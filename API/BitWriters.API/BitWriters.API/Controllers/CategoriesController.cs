@@ -46,7 +46,6 @@ namespace BitWriters.API.Controllers
 
         //GET: https://localhost:7163/api/Categories
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();
