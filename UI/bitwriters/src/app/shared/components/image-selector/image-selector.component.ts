@@ -43,6 +43,10 @@ export class ImageSelectorComponent implements OnInit {
     }
   }
 
+  selectImage(image: BlogImage): void {
+    this.imageService.selectImage(image);
+  }
+
   private getImages() {
     this.images$ = this.imageService.getAllImages();
   }
