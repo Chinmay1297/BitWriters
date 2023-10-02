@@ -123,6 +123,34 @@ namespace BitWriters.API.Controllers
             return Ok(response);
         }
 
+        //GET: {apibaseurl}/api/blogposts/{urlhandle}
+        [HttpGet]
+        [Route("{urlhandle}")]
+        public async Task<IActionResult> getBlogPostByUrlHandle([FromRoute] string urlhandle)
+        {
+            var blogPost = await blogPostRepository.GetByUrlHandleAsync(urlhandle);
+            if (blogPost == null)
+            {
+                return NotFound();
+            }
+
+            var response = new BlogPostDto
+            {
+                Id = blogPost.Id,
+                Title = blogPost.Title,
+                Author = blogPost.Author,
+                Content = blogPost.Content,
+                PublishedDate = blogPost.PublishedDate,
+                FeaturedImageUrl = blogPost.FeaturedImageUrl,
+                IsVisible = blogPost.IsVisible,
+                ShortDescription = blogPost.ShortDescription,
+                UrlHandle = blogPost.UrlHandle,
+                Categories = blogPost.Categories.Select(x => new CategoryDto { Id = x.Id, Name = x.Name, UrlHandle = x.UrlHandle }).ToList(),
+            };
+
+            return Ok(response);
+        }
+
         //PUT: {apiBaseUrl}/api/blogposts/{id}
         [HttpPut]
         [Route("{id:Guid}")]
