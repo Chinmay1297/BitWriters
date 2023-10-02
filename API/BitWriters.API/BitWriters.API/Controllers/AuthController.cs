@@ -16,6 +16,38 @@ namespace BitWriters.API.Controllers
             this.userManager = userManager;
         }
 
+
+        //POST: {apibaseurl}/api/auth/login
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequestDto request)
+        {
+            //check valid email
+            var identityUser = await userManager.FindByEmailAsync(request.Email);
+            if(identityUser is not null)
+            {
+                //check password
+                var checkPasswordResult = await userManager.CheckPasswordAsync(identityUser, request.Password);
+                if (checkPasswordResult)
+                {
+                    var roles = await userManager.GetRolesAsync(identityUser);
+                    //Create a Token and Response
+
+                    var response = new loginResponseDto(){
+                        Email = request.Email,
+                        Roles = roles.ToList(),
+                        Token = "TOKEN"
+                    };
+
+                    return Ok();
+                }
+            }
+
+            ModelState.AddModelError("", "Email or Password is incorrect");
+
+            return ValidationProblem(ModelState);
+        }
+
         //POST: {apibaseurl}/api/auth/register
         [HttpPost]
         [Route("register")]
