@@ -1,6 +1,7 @@
 ﻿using BitWriters.API.Models.Domain;
 using BitWriters.API.Models.DTO;
 using BitWriters.API.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,6 +21,7 @@ namespace BitWriters.API.Controllers
         }
         //POST: {apiBaseUrl}/api/blogposts
         [HttpPost]
+        [Authorize(Roles ="Writer")]
         public async Task<IActionResult> CreateBlogPost([FromBody]CreateBlogPostRequestDto requestDto)
         {
             //Convert from DTO to Domain Model
@@ -154,6 +156,7 @@ namespace BitWriters.API.Controllers
         //PUT: {apiBaseUrl}/api/blogposts/{id}
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> UpdateBlogPostById([FromRoute]Guid id, UpdateBlogPostRequestDto requestDto)
         {
             //Map Dto to Domain Model
@@ -209,6 +212,7 @@ namespace BitWriters.API.Controllers
         //DELETE: {apiBaseUrl}/api/blogposts/{id}
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteBlogPost([FromRoute]Guid id)
         {
             var deletedBlogPost = await blogPostRepository.DeleteAsync(id);

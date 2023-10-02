@@ -20,8 +20,9 @@ namespace BitWriters.API.Controllers
             this.categoryRepository = categoryRepository;
         }
 
-        //POST: /api/categories
+        //POST: {apibaseurl}/api/categories
         [HttpPost]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> CreateCategory([FromBody] CreateCategoryRequestDto request)
         {
             //Converting/mapping DTO to Domain model
@@ -89,6 +90,7 @@ namespace BitWriters.API.Controllers
         //PUT: https://localhost:7163/api/Categories/{id}
         [HttpPut]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> EditCategory([FromRoute] Guid id, UpdateCategoryRequestDto request)
         {
             //COnvert received DTO to Domain Model
@@ -113,6 +115,7 @@ namespace BitWriters.API.Controllers
         //DELETE: https://localhost:7163/api/Categories/{id}
         [HttpDelete]
         [Route("{id:Guid}")]
+        [Authorize(Roles = "Writer")]
         public async Task<IActionResult> DeleteCategory([FromRoute] Guid id)
         {
             var deletedCategory = await categoryRepository.DeleteAsync(id);
