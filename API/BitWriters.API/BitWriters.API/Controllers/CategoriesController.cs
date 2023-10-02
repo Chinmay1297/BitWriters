@@ -4,6 +4,7 @@ using BitWriters.API.Models.DTO;
 using BitWriters.API.Models.Domain;
 using BitWriters.API.Data;
 using BitWriters.API.Repositories.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BitWriters.API.Controllers
 {
@@ -45,6 +46,7 @@ namespace BitWriters.API.Controllers
 
         //GET: https://localhost:7163/api/Categories
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAllCategories()
         {
             var categories = await categoryRepository.GetAllAsync();
