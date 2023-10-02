@@ -1,6 +1,7 @@
 ﻿using BitWriters.API.Data;
 using BitWriters.API.Models.Domain;
 using BitWriters.API.Repositories.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace BitWriters.API.Repositories.Implementation
 {
@@ -17,6 +18,12 @@ namespace BitWriters.API.Repositories.Implementation
             this.httpContextAccessor = httpContextAccessor;
             this.dbContext = dbContext;
         }
+
+        public async Task<IEnumerable<BlogImage>> GetAll()
+        {
+            return await dbContext.BlogImages.ToListAsync();
+        }
+
         public async Task<BlogImage> Upload(IFormFile file, BlogImage blogImage)
         {
             //1-upload image to api/images folder

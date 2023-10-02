@@ -17,6 +17,31 @@ namespace BitWriters.API.Controllers
             this.imageRepository = imageRepository;
         }
 
+        //GET {apibaseurl}/api/images
+        [HttpGet]
+        public async Task<IActionResult> GetAllImages()
+        {
+            //call image repo to get all images
+            var images = await imageRepository.GetAll();
+
+            //convert images domain model to dto
+            var response = new List<BlogImageDto>();
+            foreach (var image in images)
+            {
+                response.Add(new BlogImageDto
+                {
+                    Id = image.Id,
+                    Title = image.Title,
+                    DateCreated = image.DateCreated,
+                    FileExtension = image.FileExtension,
+                    FileName = image.FileName,
+                    Url = image.Url,
+                });
+            }
+
+            return Ok(response);
+        }
+
         //POST: {apibaseurl}/api/images
         [HttpPost]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile file,
