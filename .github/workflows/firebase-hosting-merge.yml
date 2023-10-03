@@ -11,6 +11,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 18.14.1  # Set your desired Node.js version
+          check-latest: true  # Check for the latest Node.js version if 18.14.1 is not available
+
+      - name: Install Angular CLI
+        run: npm install -g @angular/cli
+
+      - name: Install project dependencies
+        run: npm ci  # Use "npm ci" for faster and more reliable dependency installation
+
+      - name: Build Angular Application
       - run: npm run build
         working-directory: UI/bitwriters
       - uses: FirebaseExtended/action-hosting-deploy@v0
