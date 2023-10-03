@@ -106,6 +106,7 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.MapControllers();
 
+// Apply Entity Framework Migrations at runtime
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
