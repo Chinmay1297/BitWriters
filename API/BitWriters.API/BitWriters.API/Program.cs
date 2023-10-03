@@ -32,6 +32,15 @@ builder.Services.AddScoped<IBlogPostRepository, BlogPostRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
+// Inject IWebHostEnvironment
+var env = builder.Services.BuildServiceProvider().GetService<IWebHostEnvironment>();
+
+// Create the "Images" folder if it doesn't exist
+var imagesFolderPath = Path.Combine(env.ContentRootPath, "Images");
+if (!Directory.Exists(imagesFolderPath))
+{
+    Directory.CreateDirectory(imagesFolderPath);
+}
 
 //configuring identity core
 builder.Services.AddIdentityCore<IdentityUser>()
