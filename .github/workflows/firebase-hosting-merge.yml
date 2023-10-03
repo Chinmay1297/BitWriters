@@ -29,7 +29,7 @@ jobs:
         working-directory: UI/bitwriters
         
       - name: Build Angular Application
-        run: ng build
+        run: npm run build
         working-directory: UI/bitwriters
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
