@@ -24,6 +24,10 @@ jobs:
       - name: Install Angular CLI
         run: npm install -g @angular/cli
 
+      - name: Install Angular Application dependencies
+        run: npm install
+        working-directory: UI/bitwriters
+        
       - name: Build Angular Application
         run: ng build
         working-directory: UI/bitwriters
