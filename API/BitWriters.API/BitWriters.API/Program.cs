@@ -106,4 +106,20 @@ app.UseStaticFiles(new StaticFileOptions
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var dbContext = services.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
+        // You can add additional logic here if needed
+    }
+    catch (Exception ex)
+    {
+        // Handle any exceptions that occur during migration
+        Console.WriteLine("Error applying migrations: " + ex.Message);
+        throw;
+    }
+}
 app.Run();
